@@ -3,10 +3,10 @@
 #include "HammingCodeApi.h"
 
 
-typedef unsigned char parityt;
+typedef unsigned char parity_t;
 
-const parityt parity_even = 0ui8;
-const parityt parity_odd  = 1ui8;
+const parity_t parity_even = 0ui8;
+const parity_t parity_odd  = 1ui8;
 
 const unsigned char hamming_3_1 = 2ui8;
 const unsigned char hamming_7_4 = 3ui8;
@@ -26,7 +26,7 @@ const unsigned char hamming_255_247 = 8ui8;
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the encoded data in bytes</returns>
-HC_API unsigned long long hc_encode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parityt parity, unsigned char parity_bits);
+HC_API unsigned long long hc_encode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits);
 
 /// <summary>
 /// Decodes the data into the buffer using the given parameters
@@ -38,7 +38,7 @@ HC_API unsigned long long hc_encode_bytes(const void* data, unsigned long long d
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the decoded data in bytes</returns>
-HC_API unsigned long long hc_decode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parityt parity, unsigned char parity_bits);
+HC_API unsigned long long hc_decode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits);
 
 /// <summary>
 /// Encodes the data into the buffer using the given parameters
@@ -50,7 +50,7 @@ HC_API unsigned long long hc_decode_bytes(const void* data, unsigned long long d
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the encoded data in bits</returns>
-HC_API unsigned long long hc_encode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parityt parity, unsigned char parity_bits);
+HC_API unsigned long long hc_encode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits);
 
 /// <summary>
 /// Decodes the data into the buffer using the given parameters
@@ -62,6 +62,6 @@ HC_API unsigned long long hc_encode(const void* data, unsigned long long data_si
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the decoded data in bits</returns>
-HC_API unsigned long long hc_decode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parityt parity, unsigned char parity_bits);
+HC_API unsigned long long hc_decode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits);
 
 #endif

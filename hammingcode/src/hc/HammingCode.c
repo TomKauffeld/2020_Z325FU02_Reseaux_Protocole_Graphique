@@ -54,7 +54,7 @@ int hc_write_data(void* data, unsigned long long size, unsigned long long index,
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the encoded data in bytes</returns>
-unsigned long long hc_encode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parityt parity, unsigned char parity_bits)
+unsigned long long hc_encode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits)
 {
 	unsigned long long s, i;
 	if (data_size * 8 < data_size || buffer_size * 8 < buffer_size)
@@ -77,7 +77,7 @@ unsigned long long hc_encode_bytes(const void* data, unsigned long long data_siz
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the decoded data in bytes</returns>
-unsigned long long hc_decode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parityt parity, unsigned char parity_bits)
+unsigned long long hc_decode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits)
 {
 	unsigned long long s, i;
 	if (data_size * 8 < data_size || buffer_size * 8 < buffer_size)
@@ -100,7 +100,7 @@ unsigned long long hc_decode_bytes(const void* data, unsigned long long data_siz
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the encoded data in bits</returns>
-unsigned long long hc_encode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parityt parity, unsigned char parity_bits)
+unsigned long long hc_encode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits)
 {
 	unsigned long long di = 0, bi = 0, i, n;
 	unsigned char b, pi;
@@ -141,7 +141,7 @@ unsigned long long hc_encode(const void* data, unsigned long long data_size, voi
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the decoded data in bits</returns>
-unsigned long long hc_decode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parityt parity, unsigned char parity_bits)
+unsigned long long hc_decode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits)
 {
 	unsigned long long di = 0, bi = 0, i, n, e;
 	unsigned char b, pi;
