@@ -3,7 +3,7 @@
 int main()
 {
 	if (!pgtklib_init())
-		return 1;
+		return -1;
 	
 
 	pgtklib_destroy();

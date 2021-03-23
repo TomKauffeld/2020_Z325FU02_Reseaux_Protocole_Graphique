@@ -3,7 +3,7 @@
 
 typedef unsigned char bool;
 
-#define TRUE 1ui8
-#define FALSE 0ui8
+#define true  1ui8
+#define false 0ui8
 
 #endif

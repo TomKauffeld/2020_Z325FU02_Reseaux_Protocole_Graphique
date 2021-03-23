@@ -2,16 +2,16 @@
 #include <pgtk/errors.h>
 
 int pgtk_lib_errno;
-bool pgtk_lib_ready = FALSE;
+bool pgtk_lib_ready = false;
 
 
 bool pgtklib_init()
 {
 	if (pgtk_lib_ready)
-		return TRUE;
+		return true;
 	pgtk_lib_errno = PGTK_ERRNO_NONE;
-	pgtk_lib_ready = TRUE;
-	return TRUE;
+	pgtk_lib_ready = true;
+	return true;
 }
 
 int pgtklib_errno()
@@ -25,9 +25,8 @@ void pgtklib_set_errno(int errno)
 }
 
 
-
 void pgtklib_destroy()
 {
-	pgtk_lib_ready = FALSE;
+	pgtk_lib_ready = false;
 	return;
 }
