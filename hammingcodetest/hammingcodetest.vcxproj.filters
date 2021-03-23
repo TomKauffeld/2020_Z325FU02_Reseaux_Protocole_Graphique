@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{22e51903-36bb-4fa8-8fb6-028fb1afe352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\hc">
+      <UniqueIdentifier>{df3c144e-03b6-4c6a-897c-265542b1c723}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\hc\main.c">
+      <Filter>src\hc</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

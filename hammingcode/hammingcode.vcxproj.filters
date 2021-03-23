@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{f26768d6-e414-414a-a605-4ed6fc59cc92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{5b7e2741-1b2b-42c4-9bdb-ffd761f8f481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\hc">
+      <UniqueIdentifier>{5c1eb7f5-5b09-4acd-bb3e-6d4e6a5fd0ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\hc">
+      <UniqueIdentifier>{f5799181-d909-4559-8f54-d46943a475a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\hc\HammingCodeApi.h">
+      <Filter>include\hc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\HammingCode.h">
+      <Filter>include\hc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hc\HammingCode.h">
+      <Filter>src\hc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\hc\HammingCode.c">
+      <Filter>src\hc</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{22e51903-36bb-4fa8-8fb6-028fb1afe352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\pgtk">
+      <UniqueIdentifier>{52b79593-2b19-43c5-884f-dc9139e630dd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\pgtk\main.c">
+      <Filter>src\pgtk</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
