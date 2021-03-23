@@ -64,9 +64,9 @@ int main()
 		for (j = 0; j < data_size * 8; ++j)
 		{
 			printf("HAMMING %d EVEN flip %d : ", i, j);
-			b1_size = hc_encode(data, data_size, b1, r_b1_size, parity_even, i);
+			b1_size = hc_encode_bytes(data, data_size, b1, r_b1_size, parity_even, i);
 			flip_bit(b1, b1_size, j);
-			b2_size = hc_decode(b1, b1_size, b2, r_b2_size, parity_even, i);
+			b2_size = hc_decode_bytes(b1, b1_size, b2, r_b2_size, parity_even, i);
 			b2[r_b2_size - 1] = 0ui8;
 			if (strcmp(data, b2) != 0)
 			{
@@ -81,9 +81,9 @@ int main()
 				printf("OK\n");
 
 			printf("HAMMING %d ODD  flip %d : ", i, j);
-			b1_size = hc_encode(data, data_size, b1, r_b1_size, parity_odd, i);
+			b1_size = hc_encode_bytes(data, data_size, b1, r_b1_size, parity_odd, i);
 			flip_bit(b1, b1_size, j);
-			b2_size = hc_decode(b1, b1_size, b2, r_b2_size, parity_odd, i);
+			b2_size = hc_decode_bytes(b1, b1_size, b2, r_b2_size, parity_odd, i);
 			b2[r_b2_size - 1] = 0ui8;
 			if (strcmp(data, b2) != 0)
 			{
