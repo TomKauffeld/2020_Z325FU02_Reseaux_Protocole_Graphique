@@ -3,6 +3,9 @@ This is a project done for the module Reseaux 2 (networking) in the 3rd year for
 
 For this project, we need to create a new protocol to encode binary data into an image with error correction (think QR code for example). And to implement the encoding part of the protocol.
 
+## Credits
+For image loading, writing and resizing, using the headers from [stb](https://github.com/nothings/stb) by [Sean Barrett](https://github.com/nothings) and [Jorge Rodriguez](https://github.com/BSVino).  
+
 ## Protocol
 The data will be split into different blocks of 4 data bits and encoded using Hamming(7,4).  
 On the image, the indexes are labels from the bottom right to the top right, and then the next column :

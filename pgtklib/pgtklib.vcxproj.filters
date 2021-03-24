@@ -16,10 +16,22 @@
     <Filter Include="include\utils">
       <UniqueIdentifier>{ea5152b1-79a6-4233-a308-32e06e822baa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\stb">
+      <UniqueIdentifier>{6f15e31a-7b3f-43a1-9f07-5df3550b86fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pgtk\PgtkLib.c">
       <Filter>src\pgtk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb\stb_image.c">
+      <Filter>src\stb</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb\stb_image_resize.c">
+      <Filter>src\stb</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb\stb_image_write.c">
+      <Filter>src\stb</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +49,15 @@
     </ClInclude>
     <ClInclude Include="include\pgtk\errors.h">
       <Filter>include\pgtk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb\stb_image.h">
+      <Filter>src\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb\stb_image_resize.h">
+      <Filter>src\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb\stb_image_write.h">
+      <Filter>src\stb</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
