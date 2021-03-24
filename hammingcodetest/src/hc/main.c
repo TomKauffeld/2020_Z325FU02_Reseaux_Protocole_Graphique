@@ -44,6 +44,42 @@ int flip_bit(void* data, unsigned long long size, unsigned long long index)
 	return 0;
 }
 
+
+int test_config(const char* data, char* b1, char* b2, unsigned long long data_size, unsigned long long b1_size, unsigned long long b2_size, parity_t parity, hc_mode_t hc_mode, int nb_parity_bits, int flip)
+{
+	HammingDecodeResult_t decodeResult;
+	HammingEncodeResult_t encodeResult;
+	printf("HAMMING %d ", nb_parity_bits);
+	if (parity == parity_even)
+		printf("EVEN");
+	else
+		printf("ODD ");
+	printf(" ");
+	if (hc_mode == hc_mode_sec)
+		printf("SEC   ");
+	else
+		printf("SECDEC");
+
+	printf(" flip %d : ", flip);
+	encodeResult = hc_encode(data, data_size * 8, b1, b1_size * 8, parity, nb_parity_bits, hc_mode);
+	flip_bit(b1, encodeResult.bits, flip);
+	decodeResult = hc_decode(b1, encodeResult.bits, b2, b2_size * 8, parity, nb_parity_bits, hc_mode);
+	b2[b2_size - 1] = 0ui8;
+	if (strcmp(data, b2) != 0)
+	{
+		printf("ERROR\n");
+		print_all("data", data, 0);
+		print_all("b1  ", b1, encodeResult.bytes);
+		print_all("b2  ", b2, decodeResult.bytes);
+		printf("result : %s\n", b2);
+		return 1;
+	}
+	else
+		printf("OK : %llu\n", decodeResult.blocks);
+	return 0;
+}
+
+
 int main()
 {
 	const char data[] = "Hello world, how are you?";
@@ -51,7 +87,6 @@ int main()
 	const unsigned long long size = 1024 + data_size * 3;
 	unsigned long long r_b1_size = size;
 	unsigned long long r_b2_size = size;
-	unsigned long long b1_size, b2_size, r;
 	int errors = 0, i, j;
 	char* b1 = (char*)malloc(r_b1_size);
 	char* b2 = (char*)malloc(r_b2_size);
@@ -63,39 +98,10 @@ int main()
 	{
 		for (j = 0; j < data_size * 8; ++j)
 		{
-			printf("HAMMING %d EVEN flip %d : ", i, j);
-			b1_size = hc_encode_bytes(data, data_size, b1, r_b1_size, parity_even, i);
-			flip_bit(b1, b1_size, j);
-			b2_size = hc_decode_bytes(b1, b1_size, b2, r_b2_size, parity_even, i);
-			b2[r_b2_size - 1] = 0ui8;
-			if (strcmp(data, b2) != 0)
-			{
-				printf("ERROR\n");
-				print_all("data", data, 0);
-				print_all("b1  ", b1, b1_size);
-				print_all("b2  ", b2, b2_size);
-				printf("result : %s\n", b2);
-				++errors;
-			}
-			else
-				printf("OK\n");
-
-			printf("HAMMING %d ODD  flip %d : ", i, j);
-			b1_size = hc_encode_bytes(data, data_size, b1, r_b1_size, parity_odd, i);
-			flip_bit(b1, b1_size, j);
-			b2_size = hc_decode_bytes(b1, b1_size, b2, r_b2_size, parity_odd, i);
-			b2[r_b2_size - 1] = 0ui8;
-			if (strcmp(data, b2) != 0)
-			{
-				printf("ERROR\n");
-				print_all("data", data, 0);
-				print_all("b1  ", b1, b1_size);
-				print_all("b2  ", b2, b2_size);
-				printf("result : %s\n", b2);
-				++errors;
-			}
-			else
-				printf("OK\n");
+			errors += test_config(data, b1, b2, data_size, r_b1_size, r_b2_size, parity_even, hc_mode_sec, i, j);
+			errors += test_config(data, b1, b2, data_size, r_b1_size, r_b2_size, parity_odd,  hc_mode_sec, i, j);
+			errors += test_config(data, b1, b2, data_size, r_b1_size, r_b2_size, parity_even, hc_mode_secded, i, j);
+			errors += test_config(data, b1, b2, data_size, r_b1_size, r_b2_size, parity_odd,  hc_mode_secded, i, j);
 		}
 	}
 	return errors;

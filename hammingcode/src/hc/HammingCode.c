@@ -54,17 +54,19 @@ int hc_write_data(void* data, unsigned long long size, unsigned long long index,
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the encoded data in bytes</returns>
-unsigned long long hc_encode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits)
+HammingEncodeResult_t hc_encode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits, hc_mode_t hc_mode)
 {
-	unsigned long long s, i;
+	HammingEncodeResult_t result = { hc_status_error_unknown, 0, 0, 0, 0, 0 };
+	unsigned long long i;
 	if (data_size * 8 < data_size || buffer_size * 8 < buffer_size)
-		return 0;
-	s = hc_encode(data, data_size * 8, buffer, buffer_size * 8, parity, parity_bits);
-	for (i = s; i % 8 > 0; ++i)
+	{
+		result.status = hc_status_error_overflow;
+		return result;
+	}
+	result = hc_encode(data, data_size * 8, buffer, buffer_size * 8, parity, parity_bits, hc_mode);
+	for (i = result.bits; i % 8 > 0; ++i)
 		hc_write_data(buffer, buffer_size * 8, i, 0);
-	if (s % 8 == 0)
-		return s / 8;
-	return s / 8 + 1;
+	return result;
 }
 
 /// <summary>
@@ -76,18 +78,20 @@ unsigned long long hc_encode_bytes(const void* data, unsigned long long data_siz
 /// <param name="buffer_size">the size of the buffer array in bytes</param>
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
-/// <returns>the length of the decoded data in bytes</returns>
-unsigned long long hc_decode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits)
+/// <returns>a structure containing information about the decoded data</returns>
+HammingDecodeResult_t hc_decode_bytes(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits, hc_mode_t hc_mode)
 {
-	unsigned long long s, i;
+	HammingDecodeResult_t result = { hc_status_error_unknown, 0, 0, 0, 0, 0, 0, 0 };
+	unsigned long long i;
 	if (data_size * 8 < data_size || buffer_size * 8 < buffer_size)
-		return 0;
-	s = hc_decode(data, data_size * 8, buffer, buffer_size * 8, parity, parity_bits);
-	for (i = s; i % 8 > 0; ++i)
+	{
+		result.status = hc_status_error_overflow;
+		return result;
+	}
+	result = hc_decode(data, data_size * 8, buffer, buffer_size * 8, parity, parity_bits, hc_mode);
+	for (i = result.bits; i % 8 > 0; ++i)
 		hc_write_data(buffer, buffer_size * 8, i, 0);
-	if (s % 8 == 0)
-		return s / 8;
-	return s / 8 + 1;
+	return result;
 }
 
 /// <summary>
@@ -100,17 +104,36 @@ unsigned long long hc_decode_bytes(const void* data, unsigned long long data_siz
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
 /// <returns>the length of the encoded data in bits</returns>
-unsigned long long hc_encode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits)
+HammingEncodeResult_t hc_encode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits, hc_mode_t hc_mode)
 {
+	HammingEncodeResult_t result = { hc_status_error_unknown, 0, 0, 0, 0, 0 };
 	unsigned long long di = 0, bi = 0, i, n;
-	unsigned char b, pi;
+	unsigned char b, pi, g;
 	unsigned char p[sizeof(unsigned long long) * 8 - 1];
-	if (parity_bits < 2 || (parity != parity_even && parity != parity_odd) || data_size < 1 || parity_bits > sizeof(unsigned long long) * 8 - 1)
-		return 0;
+	if (parity_bits < 2 || parity_bits >= sizeof(unsigned long long) * 8 - 1)
+	{
+		result.status = hc_status_error_invalid_nb_parity_bits;
+		return result;
+	}
+	if (parity != parity_even && parity != parity_odd)
+	{
+		result.status = hc_status_error_invalid_parity;
+		return result;
+	}
+	if (hc_mode != hc_mode_sec && hc_mode != hc_mode_secded)
+	{
+		result.status = hc_status_error_invalid_mode;
+		return result;
+	}
 	n = (1ui64 << parity_bits) - 1;
+	result.n = n;
+	result.k = n - parity_bits;
+	if (hc_mode == hc_mode_secded)
+		++result.n;
 	while (di < data_size)
 	{
 		memset(p, parity, sizeof(unsigned long long) * 8 - 1);
+		g = parity;
 		for (i = 0; i < n; ++i)
 		{
 			if (((i + 1) & i) == 0)
@@ -118,17 +141,32 @@ unsigned long long hc_encode(const void* data, unsigned long long data_size, voi
 			else
 				b = hc_read_data(data, data_size, di++);
 			hc_write_data(buffer, buffer_size, bi + i, b);
+			g ^= b;
 			for (pi = 0; pi < parity_bits; ++pi)
 				if (((1ui64 << pi) & (i + 1)) > 0)
 					p[pi] ^= b;
 		}
 		for (pi = 0; pi < parity_bits; ++pi)
+		{
+			g ^= p[pi];
 			hc_write_data(buffer, buffer_size, bi + (1ui64 << pi) - 1, p[pi]);
+		}
+		if (hc_mode == hc_mode_secded)
+		{
+			hc_write_data(buffer, buffer_size, bi + n, g);
+			++bi;
+		}
 		bi += n;
+		++result.blocks;
 	}
+	result.status = hc_status_ok;
+	result.bits = bi;
+	result.bytes = bi / 8;
+	if (bi % 8 != 0)
+		++result.bytes;
 	if (bi > buffer_size)
-		return buffer_size;
-	return bi;
+		result.status = hc_status_info_buffer_too_small;
+	return result;
 }
 
 /// <summary>
@@ -140,19 +178,36 @@ unsigned long long hc_encode(const void* data, unsigned long long data_size, voi
 /// <param name="buffer_size">the size of the buffer array in bits</param>
 /// <param name="parity">the parity to use (even: 0 or odd: 1)</param>
 /// <param name="parity_bits">the number of parity bits to use per block</param>
-/// <returns>the length of the decoded data in bits</returns>
-unsigned long long hc_decode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits)
+/// <returns>a structure containing information about the decoded data</returns>
+HammingDecodeResult_t hc_decode(const void* data, unsigned long long data_size, void* buffer, unsigned long long buffer_size, parity_t parity, unsigned char parity_bits, hc_mode_t hc_mode)
 {
+	HammingDecodeResult_t result = { hc_status_error_unknown, 0, 0, 0, 0, 0, 0, 0 };
 	unsigned long long di = 0, bi = 0, i, n, e;
-	unsigned char b, pi;
+	unsigned char b, pi, g;
 	unsigned char p[sizeof(unsigned long long) * 8 - 1];
-	if (parity_bits < 2 || (parity != parity_even && parity != parity_odd) || data_size < 1 || parity_bits > sizeof(unsigned long long) * 8 - 1)
-		return 0;
-	if (data_size * 8 < data_size || buffer_size * 8 < buffer_size)
-		return 0;
+	if (parity_bits < 2 || parity_bits >= sizeof(unsigned long long) * 8 - 1)
+	{
+		result.status = hc_status_error_invalid_nb_parity_bits;
+		return result;
+	}
+	if (parity != parity_even && parity != parity_odd) 
+	{
+		result.status = hc_status_error_invalid_parity;
+		return result;
+	}
+	if (hc_mode != hc_mode_sec && hc_mode != hc_mode_secded)
+	{
+		result.status = hc_status_error_invalid_mode;
+		return result;
+	}
 	n = (1ui64 << parity_bits) - 1;
+	result.n = n;
+	result.k = n - parity_bits;
+	if (hc_mode == hc_mode_secded)
+		++result.n;
 	while (di < data_size)
 	{
+		g = parity;
 		memset(p, parity, sizeof(unsigned long long) * 8 - 1);
 		for (i = 0; i < n; ++i)
 		{
@@ -160,22 +215,44 @@ unsigned long long hc_decode(const void* data, unsigned long long data_size, voi
 			for (pi = 0; pi < parity_bits; ++pi)
 				if (((1ui64 << pi) & (i + 1)) > 0)
 					p[pi] ^= b;
+			g ^= b;
+		}
+		if (hc_mode == hc_mode_secded)
+		{
+			g ^= hc_read_data(data, data_size, di + n);
+			if (g > 0)
+				++result.errors;
 		}
 		e = 0;
 		for (pi = 0; pi < parity_bits; ++pi)
 			if (p[pi] > 0)
 				e += 1ui64 << pi;
+		if (e > 0)
+			++result.errors;
 		for (i = 0; i < n; ++i)
 		{
 			b = hc_read_data(data, data_size, di + i);
 			if (i + 1 == e)
+			{
 				b ^= 1ui8;
+				++result.corrected;
+			}
 			if (((i + 1) & i) != 0)
 				hc_write_data(buffer, buffer_size, bi++, b);
 		}
 		di += n;
+		if (hc_mode == hc_mode_secded)
+			++di;
+		++result.blocks;
 	}
+	result.status = hc_status_ok;
+	result.bits = bi;
+	result.bytes = bi / 8;
+	if (bi % 8 != 0)
+		++result.bytes;
 	if (bi > buffer_size)
-		return buffer_size;
-	return bi;
+		result.status = hc_status_info_buffer_too_small;
+	if (result.errors > result.corrected)
+		result.status = hc_status_error_too_many_flips;
+	return result;
 }
