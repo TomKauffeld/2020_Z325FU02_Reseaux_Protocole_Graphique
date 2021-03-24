@@ -3,7 +3,11 @@
 
 #include <pgtk/pgtklib.h>
 
-void pgtklib_set_errno(int errno);
+bool pgtklib_ready();
+
+void pgtklib_clear_error();
+
+void pgtklib_set_error(int errno, const char* error);
 
 #endif
 

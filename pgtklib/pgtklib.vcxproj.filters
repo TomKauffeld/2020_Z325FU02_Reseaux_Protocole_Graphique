@@ -33,6 +33,12 @@
     <ClCompile Include="src\stb\stb_image_write.c">
       <Filter>src\stb</Filter>
     </ClCompile>
+    <ClCompile Include="src\pgtk\Image.c">
+      <Filter>src\pgtk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pgtk\Encoder.c">
+      <Filter>src\pgtk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pgtk\PgtkLib.h">
@@ -58,6 +64,18 @@
     </ClInclude>
     <ClInclude Include="src\stb\stb_image_write.h">
       <Filter>src\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pgtk\Image.h">
+      <Filter>src\pgtk</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pgtk\Image.h">
+      <Filter>include\pgtk</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pgtk\Encoder.h">
+      <Filter>include\pgtk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pgtk\Encoder.h">
+      <Filter>src\pgtk</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

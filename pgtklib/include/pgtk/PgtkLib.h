@@ -8,6 +8,8 @@ PGTK_API bool pgtklib_init();
 
 PGTK_API int pgtklib_errno();
 
+PGTK_API const char* pgtklib_error();
+
 PGTK_API void pgtklib_destroy();
 
 #endif

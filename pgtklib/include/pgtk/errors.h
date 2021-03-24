@@ -3,4 +3,12 @@
 
 #define PGTK_ERRNO_NONE 0i32
 
+#define PGTK_ERRNO_MALLOC 1i32
+
+#define PGTK_ERRNO_STB 2i32
+
+#define PGTK_ERRNO_ENCODING_HC 3i32
+
+#define PGTK_ERROR_ENCODING_SIZE 4i32
+
 #endif

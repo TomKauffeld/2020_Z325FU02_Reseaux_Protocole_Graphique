@@ -82,8 +82,15 @@ int test_config(const char* data, char* b1, char* b2, unsigned long long data_si
 
 int main()
 {
-	const char data[] = "Hello world, how are you?";
+	const char data[] = "Hello World";
 	unsigned long long data_size = sizeof(data);
+	char buffer[sizeof(data) * 2];
+	unsigned long long buffer_size = sizeof(buffer);
+	hc_encode(data, data_size * 8, buffer, buffer_size * 8, parity_odd, hamming_7_4, hc_mode_secded);
+	print_bin("", buffer, buffer_size);
+	return 0;
+
+	/*
 	const unsigned long long size = 1024 + data_size * 3;
 	unsigned long long r_b1_size = size;
 	unsigned long long r_b2_size = size;
@@ -105,4 +112,5 @@ int main()
 		}
 	}
 	return errors;
+	*/
 }
