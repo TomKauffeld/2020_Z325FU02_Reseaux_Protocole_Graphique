@@ -11,5 +11,4 @@ struct image {
 
 void image_internal_set(Image_t* image, unsigned int x, unsigned int y, unsigned int length, unsigned char c);
 
-
 #endif

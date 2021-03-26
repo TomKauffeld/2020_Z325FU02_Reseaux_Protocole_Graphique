@@ -175,6 +175,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\pgtk\Decoder.c" />
     <ClCompile Include="src\pgtk\Encoder.c" />
     <ClCompile Include="src\pgtk\Image.c" />
     <ClCompile Include="src\pgtk\PgtkLib.c" />
@@ -183,15 +184,18 @@
     <ClCompile Include="src\stb\stb_image_write.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\pgtk\Decoder.h" />
     <ClInclude Include="include\pgtk\Encoder.h" />
     <ClInclude Include="include\pgtk\errors.h" />
     <ClInclude Include="include\pgtk\Image.h" />
     <ClInclude Include="include\pgtk\PgtkLib.h" />
     <ClInclude Include="include\pgtk\PgtkLibApi.h" />
     <ClInclude Include="include\utils\Bool.h" />
+    <ClInclude Include="src\pgtk\Decoder.h" />
     <ClInclude Include="src\pgtk\Encoder.h" />
     <ClInclude Include="src\pgtk\Image.h" />
     <ClInclude Include="src\pgtk\PgtkLib.h" />
+    <ClInclude Include="src\pgtk\pgtk_definitions.h" />
     <ClInclude Include="src\stb\stb_image.h" />
     <ClInclude Include="src\stb\stb_image_resize.h" />
     <ClInclude Include="src\stb\stb_image_write.h" />

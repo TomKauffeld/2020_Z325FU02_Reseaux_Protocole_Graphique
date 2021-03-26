@@ -41,6 +41,12 @@ void pgtklib_set_error(int errno, const char* error)
 	pgtk_lib_error = error;
 }
 
+int pgtklib_set_error_int(int errno, const char* error, int ret)
+{
+	pgtklib_set_error(errno, error);
+	return ret;
+}
+
 
 void pgtklib_destroy()
 {

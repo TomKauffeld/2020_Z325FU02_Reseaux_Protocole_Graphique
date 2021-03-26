@@ -39,6 +39,9 @@
     <ClCompile Include="src\pgtk\Encoder.c">
       <Filter>src\pgtk</Filter>
     </ClCompile>
+    <ClCompile Include="src\pgtk\Decoder.c">
+      <Filter>src\pgtk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pgtk\PgtkLib.h">
@@ -75,6 +78,15 @@
       <Filter>include\pgtk</Filter>
     </ClInclude>
     <ClInclude Include="src\pgtk\Encoder.h">
+      <Filter>src\pgtk</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pgtk\Decoder.h">
+      <Filter>include\pgtk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pgtk\Decoder.h">
+      <Filter>src\pgtk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pgtk\pgtk_definitions.h">
       <Filter>src\pgtk</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,29 +6,29 @@ typedef unsigned char parity_t;
 typedef unsigned char hc_mode_t;
 typedef signed char hc_status_t;
 
-const parity_t parity_even = 0ui8;
-const parity_t parity_odd  = 1ui8;
+#define parity_even 0ui8
+#define parity_odd  1ui8
 
-const hc_mode_t hc_mode_sec = 0ui8;
-const hc_mode_t hc_mode_secded = 1ui8;
+#define hc_mode_sec 0ui8
+#define hc_mode_secded 1ui8
 
-const unsigned char hamming_3_1 = 2ui8;
-const unsigned char hamming_7_4 = 3ui8;
-const unsigned char hamming_15_11 = 4ui8;
-const unsigned char hamming_31_26 = 5ui8;
-const unsigned char hamming_63_57 = 6ui8;
-const unsigned char hamming_127_120 = 7ui8;
-const unsigned char hamming_255_247 = 8ui8;
+#define hamming_3_1 2ui8
+#define hamming_7_4 3ui8
+#define hamming_15_11 4ui8
+#define hamming_31_26 5ui8
+#define hamming_63_57 6ui8
+#define hamming_127_120 7ui8
+#define hamming_255_247 8ui8
 
 
-const hc_status_t hc_status_info_buffer_too_small = 1;
-const hc_status_t hc_status_ok = 0;
-const hc_status_t hc_status_error_unknown = -1;
-const hc_status_t hc_status_error_overflow = -2;
-const hc_status_t hc_status_error_invalid_parity = -3;
-const hc_status_t hc_status_error_too_many_flips = -4;
-const hc_status_t hc_status_error_invalid_nb_parity_bits = -5;
-const hc_status_t hc_status_error_invalid_mode = -6;
+#define hc_status_info_buffer_too_small 1
+#define hc_status_ok 0
+#define hc_status_error_unknown -1
+#define hc_status_error_overflow -2
+#define hc_status_error_invalid_parity -3
+#define hc_status_error_too_many_flips -4
+#define hc_status_error_invalid_nb_parity_bits -5
+#define hc_status_error_invalid_mode -6
 
 typedef struct hammingEncodeResult {
 	hc_status_t status;

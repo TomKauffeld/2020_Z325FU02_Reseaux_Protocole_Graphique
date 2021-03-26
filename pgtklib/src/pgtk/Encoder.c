@@ -6,11 +6,39 @@
 #include <stdlib.h>
 #include <math.h>
 #include <pgtk/errors.h>
+#include "pgtk_definitions.h"
 
-#define MARKER_SIZE 9
-#define MARKER_NB 3
-#define MARKER_WASTED (MARKER_SIZE * MARKER_SIZE * MARKER_NB)
-#define PGTK_VERSION 1ui8
+unsigned char pgtk_encoder_read(unsigned char* data, unsigned long long data_size, unsigned long long block_size, unsigned long long block, unsigned long bit)
+{
+	unsigned long long i;
+	unsigned char b;
+	unsigned long long index = block_size * block + bit;
+	if (index >= data_size)
+		return 0ui8;
+	i = index / 8ui64;
+	b = 1 << (index % 8ui8);
+	if ((((const unsigned char*)data)[i] & b) > 0)
+		return 1ui8;
+	return 0ui8;
+}
+
+
+Image_t* pgtk_encode_resize(void* data, unsigned long long size, unsigned int scale)
+{
+	Image_t* source;
+	Image_t* destination;
+	if (scale < 1)
+	{
+		pgtklib_set_error(PGTK_ERRNO_IMAGE_SCALE, "invalid scale");
+		return -1;
+	}
+	source = pgtk_encode(data, size);
+	if (!source)
+		return NULL;
+	destination = image_resize(source, image_get_width(source) * scale, image_get_height(source) * scale);
+	image_destroy(source);
+	return destination;
+}
 
 Image_t* pgtk_encode(void* data, unsigned long long size)
 {
@@ -24,9 +52,10 @@ Image_t* pgtk_encode(void* data, unsigned long long size)
 	unsigned char blocks;
 	unsigned int x, y;
 	Image_t* image;
+	unsigned long long buffer_size = size * 2;
 	if (!pgtklib_ready())
 		return NULL;
-	buffer = (char*)malloc(size * 2);
+	buffer = (char*)malloc(buffer_size);
 	if (!buffer)
 	{
 		pgtklib_set_error(PGTK_ERRNO_MALLOC, "couldn't allocate memory");
@@ -42,7 +71,7 @@ Image_t* pgtk_encode(void* data, unsigned long long size)
 	if (result.blocks > UCHAR_MAX)
 	{
 		free(buffer);
-		pgtklib_set_error(PGTK_ERROR_ENCODING_SIZE, "too much data");
+		pgtklib_set_error(PGTK_ERRNO_ENCODING_SIZE, "too much data");
 		return NULL;
 	}
 	blocks = (unsigned char)result.blocks;
@@ -94,7 +123,7 @@ Image_t* pgtk_encode(void* data, unsigned long long size)
 	for (b = 0; b < 8; ++b)
 	{
 		tmp_uc = 1 << b;
-		if ((PGTK_VERSION & tmp_uc) > 0)
+		if ((PGTK_VERSION_1 & tmp_uc) > 0)
 		{
 			image_internal_set(image, 8, b, 1, 0);
 			image_internal_set(image, b, s - 9, 1, 0);
@@ -110,17 +139,16 @@ Image_t* pgtk_encode(void* data, unsigned long long size)
 
 	x = s - 1;
 	y = s - 1;
-	for (b = 0; b < 8; ++b)
+	for (b = 0; b < result.n; ++b)
 	{
-		tmp_uc = 1 << b;
 		for (i = 0; i < result.blocks; ++i)
 		{
-			if ((buffer[i] & tmp_uc) > 0)
+			if (pgtk_encoder_read(buffer, result.bits, result.n, i, b))
 				image_internal_set(image, x, y, 1, 0);
-			if (y == 0 || (y <= 9 && (x < 9 || x >= s - 9)))
+			if (y == 0 || (y <= MARKER_SIZE && (x < MARKER_SIZE || x >= s - MARKER_SIZE)))
 			{
-				if (x <= 9)
-					y = s - 10;
+				if (x <= MARKER_SIZE)
+					y = s - MARKER_SIZE - 1;
 				else
 					y = s - 1;
 				--x;

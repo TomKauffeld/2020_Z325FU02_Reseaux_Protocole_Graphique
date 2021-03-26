@@ -3,6 +3,7 @@
 #include "PgtkLibApi.h"
 #include "Image.h"
 
+PGTK_API Image_t* pgtk_encode_resize(void* data, unsigned long long size, unsigned int scale);
 
 PGTK_API Image_t* pgtk_encode(void* data, unsigned long long size);
 

@@ -120,6 +120,12 @@ unsigned char image_get_b(const Image_t* image, unsigned int x, unsigned int y)
 	return image_get(image, x, y).b;
 }
 
+unsigned char image_get_brightness(const Image_t* image, unsigned int x, unsigned int y)
+{
+	Color_t c = image_get(image, x, y);
+	return ((unsigned int)c.r + c.g + c.b) / 3;
+}
+
 void image_set(Image_t* image, unsigned int x, unsigned int y, Color_t c)
 {
 	if (x >= image->width || y >= image->height)

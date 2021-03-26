@@ -28,6 +28,8 @@ PGTK_API unsigned char image_get_r(const Image_t* image, unsigned int x, unsigne
 PGTK_API unsigned char image_get_g(const Image_t* image, unsigned int x, unsigned int y);
 PGTK_API unsigned char image_get_b(const Image_t* image, unsigned int x, unsigned int y);
 
+PGTK_API unsigned char image_get_brightness(const Image_t* image, unsigned int x, unsigned int y);
+
 PGTK_API void image_set_r(Image_t* image, unsigned int x, unsigned int y, unsigned char r);
 PGTK_API void image_set_g(Image_t* image, unsigned int x, unsigned int y, unsigned char g);
 PGTK_API void image_set_b(Image_t* image, unsigned int x, unsigned int y, unsigned char b);
