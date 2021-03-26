@@ -7,7 +7,7 @@ For this project, we need to create a new protocol to encode binary data into an
 For image loading, writing and resizing, using the headers from [stb](https://github.com/nothings/stb) by [Sean Barrett](https://github.com/nothings) and [Jorge Rodriguez](https://github.com/BSVino).  
 
 ## Protocol
-The data will be split into different blocks of 4 data bits and encoded using Hamming(7,4).  
+The data will be split into different blocks of 4 data bits and encoded using Hamming(7,4) with odd parity and using secded.  
 On the image, the indexes are labels from the bottom right to the top right, and then the next column :
 |   | c1| c2| c3|
 |---|---|---|---|
@@ -15,7 +15,7 @@ On the image, the indexes are labels from the bottom right to the top right, and
 | r2|  7|  5|  2|
 | r3|  6|  4|  1|
 
-The encoded data will then be inserted in an alternating pattern by putting down one bit from each block repeated 7 times.  
+The encoded data will then be inserted in an alternating pattern by putting down one bit from each block repeated 8 times.  
 Exemple : using 3 blocks : `a`, `b`, `c` and `d`
 
 |index|block| bit |
