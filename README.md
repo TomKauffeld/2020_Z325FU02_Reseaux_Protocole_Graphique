@@ -16,7 +16,7 @@ On the image, the indexes are labels from the bottom right to the top right, and
 | r3|  6|  4|  1|
 
 The encoded data will then be inserted in an alternating pattern by putting down one bit from each block repeated 8 times.  
-Exemple : using 3 blocks : `a`, `b`, `c` and `d`
+Exemple : using 4 blocks : `a`, `b`, `c` and `d`
 
 |index|block| bit |
 |----:|----:|----:|
