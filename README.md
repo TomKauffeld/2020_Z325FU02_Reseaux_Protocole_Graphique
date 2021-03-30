@@ -51,3 +51,13 @@ Top left corner :
 | r9 | s1 | s2 | s3 | s4 | s5 | s6 | s7 | s8 |    |
 
 The rest of the corners will be rotated so the internal white space is oriented to the center of the image.
+
+## Command line interface
+In the project `pgtk` a command line interface executable will be created.  
+### Usage :  
+#### Encoding :
+* read from the arguments : `./pgtk encode -o "output_image.bmp" -c "input string"`
+* read from a file : `./pgtk encode -o "output_image.bmp" -i "input_file"`
+#### Decoding :
+* write to the console : `./pgtk decode -i "input_image.bmp" -c`
+* write to a file : `./pgtk decode -i "input_image.bmp" -o "output_file"`
