@@ -23,6 +23,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stb", "stb\stb.vcxproj", "{9E99996F-92E4-4F8C-9047-494114F4D2E5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pgtk", "pgtk\pgtk.vcxproj", "{E48725DD-5835-4664-A414-69FDE72E125D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A645BD57-D83F-4A11-A766-1F6BB278FC1F} = {A645BD57-D83F-4A11-A766-1F6BB278FC1F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

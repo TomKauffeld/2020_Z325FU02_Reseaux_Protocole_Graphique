@@ -215,13 +215,6 @@ HammingDecodeResult_t hc_decode(const void* data, unsigned long long data_size, 
 			for (pi = 0; pi < parity_bits; ++pi)
 				if (((1ui64 << pi) & (i + 1)) > 0)
 					p[pi] ^= b;
-			g ^= b;
-		}
-		if (hc_mode == hc_mode_secded)
-		{
-			g ^= hc_read_data(data, data_size, di + n);
-			if (g > 0)
-				++result.errors;
 		}
 		e = 0;
 		for (pi = 0; pi < parity_bits; ++pi)
@@ -237,8 +230,15 @@ HammingDecodeResult_t hc_decode(const void* data, unsigned long long data_size, 
 				b ^= 1ui8;
 				++result.corrected;
 			}
+			g ^= b;
 			if (((i + 1) & i) != 0)
 				hc_write_data(buffer, buffer_size, bi++, b);
+		}
+		if (hc_mode == hc_mode_secded)
+		{
+			g ^= hc_read_data(data, data_size, di + n);
+			if (g > 0)
+				++result.errors;
 		}
 		di += n;
 		if (hc_mode == hc_mode_secded)
