@@ -73,7 +73,7 @@ unsigned long long pgtk_decode_v1(const Image_t* image, void* buffer, unsigned l
 }
 
 
-int pgtk_decode_marker(const Image_t* image, unsigned long long x, unsigned long long y, unsigned char threshold, unsigned char orientation, unsigned char* size, unsigned char* version)
+int pgtk_decode_marker(const Image_t* image, unsigned int x, unsigned int y, unsigned char threshold, unsigned char orientation, unsigned char* size, unsigned char* version)
 {
 	unsigned int i, j, min_j, max_j;
 	unsigned int offset_x = 0;
@@ -161,10 +161,8 @@ int pgtk_decode_marker(const Image_t* image, unsigned long long x, unsigned long
 unsigned long long pgtk_decode_flat(const Image_t* image, void* buffer, unsigned long long buffer_size, unsigned char threshold)
 {
 	unsigned int s;
-	unsigned char version;
-	unsigned char size;
-	unsigned char tmp_version;
-	unsigned char tmp_size;
+	unsigned char version, version_1, version_2, version_3;
+	unsigned char size, size_1, size_2, size_3;
 	if (image_get_height(image) != image_get_width(image))
 		return pgtklib_set_error_int(PGTK_ERRNO_INVALID_IMAGE, "image not square", 0);
 	s = image_get_width(image);
@@ -172,17 +170,28 @@ unsigned long long pgtk_decode_flat(const Image_t* image, void* buffer, unsigned
 		return pgtklib_set_error_int(PGTK_ERRNO_INVALID_IMAGE, "image too small", 0);
 
 
-	if (!pgtk_decode_marker(image, 0, 0, threshold, ORIENTATION_TOP_LEFT, &size, &version))
+	if (!pgtk_decode_marker(image, 0, 0, threshold, ORIENTATION_TOP_LEFT, &size_1, &version_1))
 		return pgtklib_set_error_int(PGTK_ERRNO_INVALID_IMAGE, "missing marker", 0);
 
-	if (!pgtk_decode_marker(image, 0, s - MARKER_SIZE, threshold, ORIENTATION_BOTTOM_LEFT, &tmp_size, &tmp_version))
+	if (!pgtk_decode_marker(image, 0, s - MARKER_SIZE, threshold, ORIENTATION_BOTTOM_LEFT, &size_2, &version_2))
 		return pgtklib_set_error_int(PGTK_ERRNO_INVALID_IMAGE, "missing marker", 0);
-	if (tmp_size != size || tmp_version != version)
+
+	if (!pgtk_decode_marker(image, s - MARKER_SIZE, 0, threshold, ORIENTATION_TOP_RIGHT, &size_3, &version_3))
+		return pgtklib_set_error_int(PGTK_ERRNO_INVALID_IMAGE, "missing marker", 0);
+
+
+	if (size_1 == size_2 || size_1 == size_3)
+		size = size_1;
+	else if (size_2 == size_3)
+		size = size_2;
+	else
 		return pgtklib_set_error_int(PGTK_ERRNO_INVALID_IMAGE, "invalid marker", 0);
 
-	if (!pgtk_decode_marker(image, s - MARKER_SIZE, 0, threshold, ORIENTATION_TOP_RIGHT, &tmp_size, &tmp_version))
-		return pgtklib_set_error_int(PGTK_ERRNO_INVALID_IMAGE, "missing marker", 0);
-	if (tmp_size != size || tmp_version != version)
+	if (version_1 == version_2 || version_1 == version_3)
+		version = version_1;
+	else if (version_2 == version_3)
+		version = version_2;
+	else
 		return pgtklib_set_error_int(PGTK_ERRNO_INVALID_IMAGE, "invalid marker", 0);
 
 	switch (version)
@@ -205,7 +214,7 @@ unsigned long long pgtk_decode_resize(const Image_t* image, void* buffer, unsign
 	}
 	tmp = image_resize(image, image_get_width(image) / scale, image_get_height(image) / scale);
 	if (!tmp)
-		return NULL;
+		return 0;
 	ret = pgtk_decode_flat(tmp, buffer, buffer_size, threshold);
 	image_destroy(tmp);
 	return ret;

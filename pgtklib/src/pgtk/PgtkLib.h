@@ -7,9 +7,9 @@ bool pgtklib_ready();
 
 void pgtklib_clear_error();
 
-void pgtklib_set_error(int errno, const char* error);
+void pgtklib_set_error(int perrno, const char* error);
 
-int pgtklib_set_error_int(int errno, const char* error, int ret);
+int pgtklib_set_error_int(int perrno, const char* error, int ret);
 
 #endif
 

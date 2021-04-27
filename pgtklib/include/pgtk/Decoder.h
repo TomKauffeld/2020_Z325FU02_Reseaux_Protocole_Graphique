@@ -4,11 +4,11 @@
 #include "Image.h"
 
 
-PGTK_API unsigned long long pgtk_decode_flat(Image_t* image, void* buffer, unsigned long long buffer_size, unsigned char threshold);
+PGTK_API unsigned long long pgtk_decode_flat(const Image_t* image, void* buffer, unsigned long long buffer_size, unsigned char threshold);
 
-PGTK_API unsigned long long pgtk_decode_resize(Image_t* image, void* buffer, unsigned long long buffer_size, unsigned char threshold, unsigned int scale);
+PGTK_API unsigned long long pgtk_decode_resize(const Image_t* image, void* buffer, unsigned long long buffer_size, unsigned char threshold, unsigned int scale);
 
-PGTK_API unsigned long long pgtk_decode(Image_t* image, void* buffer, unsigned long long buffer_size);
+PGTK_API unsigned long long pgtk_decode(const Image_t* image, void* buffer, unsigned long long buffer_size);
 
 
 

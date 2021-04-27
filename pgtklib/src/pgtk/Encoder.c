@@ -30,7 +30,7 @@ Image_t* pgtk_encode_resize(void* data, unsigned long long size, unsigned int sc
 	if (scale < 1)
 	{
 		pgtklib_set_error(PGTK_ERRNO_IMAGE_SCALE, "invalid scale");
-		return -1;
+		return NULL;
 	}
 	source = pgtk_encode(data, size);
 	if (!source)
@@ -46,7 +46,7 @@ Image_t* pgtk_encode(void* data, unsigned long long size)
 	unsigned char* buffer;
 	unsigned int s;
 	long double tmp_ld;
-	int i, j;
+	int i;
 	unsigned char b;
 	unsigned char tmp_uc;
 	unsigned char blocks;
@@ -75,7 +75,7 @@ Image_t* pgtk_encode(void* data, unsigned long long size)
 		return NULL;
 	}
 	blocks = (unsigned char)result.blocks;
-	tmp_ld = sqrtl(result.bits + MARKER_WASTED);
+	tmp_ld = sqrtl((long double)(result.bits + MARKER_WASTED));
 	s = (unsigned int)ceill(tmp_ld);
 	if (s < MARKER_SIZE * 2)
 		s = MARKER_SIZE * 2;
@@ -85,7 +85,7 @@ Image_t* pgtk_encode(void* data, unsigned long long size)
 		free(buffer);
 		return NULL;
 	}
-	memset(image->data, 0xffui8, (size_t)s * s * 3);
+	memset(image->data.bytes, 0xffui8, (size_t)s * s * 3);
 	//TOP LEFT MARKER
 	image_internal_set(image, 0, 0, 8, 0);
 	image_internal_set(image, 2, 2, 4, 0);

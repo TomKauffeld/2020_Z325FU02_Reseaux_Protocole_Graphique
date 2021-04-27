@@ -15,7 +15,7 @@ PGTK_API Image_t* image_init(unsigned int width, unsigned int height);
 
 PGTK_API Image_t* image_load(const char* filepath);
 
-PGTK_API Image_t* image_resize(Image_t* source, unsigned int new_width, unsigned int new_height);
+PGTK_API Image_t* image_resize(const Image_t* source, unsigned int new_width, unsigned int new_height);
 
 PGTK_API int image_save(const Image_t* image, const char* filepath);
 
