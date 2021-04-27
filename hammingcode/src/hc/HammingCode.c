@@ -239,6 +239,8 @@ HammingDecodeResult_t hc_decode(const void* data, unsigned long long data_size, 
 			g ^= hc_read_data(data, data_size, di + n);
 			if (g > 0)
 				++result.errors;
+			if (e == 0)
+				++result.corrected;
 		}
 		di += n;
 		if (hc_mode == hc_mode_secded)
