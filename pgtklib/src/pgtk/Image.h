@@ -5,10 +5,7 @@
 struct image {
 	unsigned int width;
 	unsigned int height;
-	union {
-		Color_t* colors;
-		unsigned char* bytes;
-	} data;
+	Color_t* data;
 };
 
 

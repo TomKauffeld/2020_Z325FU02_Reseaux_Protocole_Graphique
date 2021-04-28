@@ -85,7 +85,7 @@ Image_t* pgtk_encode(void* data, unsigned long long size)
 		free(buffer);
 		return NULL;
 	}
-	memset(image->data.bytes, 0xffui8, (size_t)s * s * 3);
+	memset(image->data, 0xffui8, (size_t)s * s * 3);
 	//TOP LEFT MARKER
 	image_internal_set(image, 0, 0, 8, 0);
 	image_internal_set(image, 2, 2, 4, 0);
